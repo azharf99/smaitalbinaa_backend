@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import sys
 from dotenv import load_dotenv
+from datetime import timedelta
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -82,7 +83,9 @@ INSTALLED_APPS = [
     'teachers',
     'easy_thumbnails',
     "rest_framework",
+    "rest_framework_simplejwt",
     "corsheaders",
+    'social_django',
 ]
 
 
@@ -130,6 +133,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -301,10 +307,26 @@ else:
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ]
 }
+
+
+# --- Social Auth Settings ---
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_CLIENT_ID')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/api/auth/exchange-token/'
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
@@ -314,8 +336,13 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://localhost:3000",
 ]
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
+    "UPDATE_LAST_LOGIN": True,
+}
 if not DEBUG:
-    
 
     CORS_ALLOWED_ORIGINS = [
         "https://smaitalbinaa.pythonanywhere.com",
