@@ -19,18 +19,17 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.contrib.flatpages.views import flatpage
 from django.urls import include, path
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework.routers import DefaultRouter
 from academic_calendar.views import AcademicCalendarViewSet
 from achievements.views import PrestasiViewSet, ProgramPrestasiViewSet
 from classes.views import ClassViewSet
-from teachers.views import TeacherViewSet
+from teachers.views import TeacherViewSet, UsersViewSet
 from students.views import StudentViewSet
-
 from utils.login import exchange_token
+from utils.views import MyTokenObtainPairView
+
+
 router = DefaultRouter()
 router.register(r'academic-calendars', AcademicCalendarViewSet, basename='academiccalendar')
 router.register(r'achievements', PrestasiViewSet, basename='prestasi')
@@ -38,12 +37,13 @@ router.register(r'achievements-program', ProgramPrestasiViewSet, basename='progr
 router.register(r'classes', ClassViewSet, basename='class')
 router.register(r'students', StudentViewSet, basename='student')
 router.register(r'teachers', TeacherViewSet, basename='teacher')
+router.register(r'users', UsersViewSet, basename='users')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('social_django.urls', namespace='social')),
     path('api/', include(router.urls)), # Include the achievements app urls
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/exchange-token/', exchange_token, name='token_exchange'),
     
