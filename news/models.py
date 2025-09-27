@@ -29,6 +29,10 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('category-list')
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
 
 class Post(CleanableFileModel):
@@ -38,7 +42,7 @@ class Post(CleanableFileModel):
     )
     
     title = models.CharField(max_length=255, db_index=True)
-    slug = models.SlugField(max_length=255, unique_for_date='created_at', db_index=True, help_text="Jika tidak diisi, akan otomatis terisi dengan judul")
+    slug = models.SlugField(max_length=255, blank=True, unique_for_date='created_at', db_index=True, help_text="Jika tidak diisi, akan otomatis terisi dengan judul")
     content = RichTextUploadingField()
     author = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='blog_posts', db_index=True)
     category = models.ManyToManyField(Category, related_name='posts', db_index=True, help_text="Pada PC, Tekan Ctrl untuk memilih lebih dari satu kategori")

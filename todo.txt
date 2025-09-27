@@ -1,0 +1,24 @@
+academic_calendar ✅
+achievements ✅
+alumni ✅
+class_reports
+classes
+courses
+ckeditor
+ckeditor_uploader
+dashboard
+extracurricular_reports
+extracurricular_scores
+extracurriculars
+news
+notifications
+olympiads
+private
+raker
+schedules
+student_projects
+students ✅
+taggit
+tahfidz
+userlog
+teachers ✅

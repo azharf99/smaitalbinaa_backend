@@ -27,6 +27,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = {
         'user': ['exact'],
+        'status': ['exact'],
     }
 
     def get_queryset(self):

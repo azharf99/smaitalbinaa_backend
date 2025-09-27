@@ -4,6 +4,6 @@ class StandardResultsSetPagination(PageNumberPagination):
     """
     Custom pagination class to standardize page size and allow client overrides.
     """
-    page_size = 10
+    page_size = 32
     page_size_query_param = 'page_size'
     max_page_size = 100
