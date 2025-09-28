@@ -11,16 +11,16 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'name', 'slug', 'description']
-        read_only_fields = ['slug', 'name', 'slug', 'description']
+        read_only_fields = ['slug']
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = TeacherSerializer(read_only=True)
+    author = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = Comment
         fields = ['id', 'post', 'author', 'body', 'created_at', 'active']
-        read_only_fields = ['post', 'author', 'body', 'created_at', 'active']
+        read_only_fields = ['author', 'created_at', 'active']
 
 
 class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
@@ -34,6 +34,9 @@ class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
         source="author", 
         write_only=True,
     )
+    # author = serializers.StringRelatedField(read_only=True)
+    # category = serializers.StringRelatedField(read_only=True, many=True)
+
     category = CategorySerializer(many=True, read_only=True)
     category_ids = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), 
@@ -44,13 +47,16 @@ class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     tags = TagListSerializerField()
 
+    comments = CommentSerializer(many=True, read_only=True)
+
+
 
     class Meta:
         model = Post
         fields = [
             "id", "title", "slug", "content", "author", "author_id",
             "category", "category_ids", "tags", "status", "featured_image",
-            "created_at", "updated_at"
+            "created_at", "updated_at", "comments",
         ]
         read_only_fields = ["slug", "created_at", "updated_at"]
 

@@ -10,7 +10,7 @@ class UsersViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing Teacher instances.
     """
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by('username')
     serializer_class = UserSerializer
     permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination

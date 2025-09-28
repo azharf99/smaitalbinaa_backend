@@ -25,9 +25,10 @@ from academic_calendar.views import AcademicCalendarViewSet
 from achievements.views import PrestasiViewSet, ProgramPrestasiViewSet
 from alumni.views import AlumniViewSet
 from classes.views import ClassViewSet
-from news.views import CategoryViewSet, CommentViewSet, PostViewSet
-from tahfidz.views import TahfidzViewSet, TargetViewSet, TilawahQuickCreateView, TilawahViewSet
-from teachers.views import TeacherViewSet
+from courses.views import CourseViewSet, SubjectViewSet
+from news.views import CategoryViewSet, CommentViewSet, ImageUploadView, PostViewSet
+from tahfidz.views import TahfidzViewSet, TargetViewSet, TilawahViewSet
+from teachers.views import TeacherViewSet, UsersViewSet
 from students.views import StudentViewSet
 from utils.login import exchange_token
 from utils.views import MyTokenObtainPairView
@@ -40,6 +41,7 @@ router.register(r'achievements-program', ProgramPrestasiViewSet, basename='progr
 router.register(r'classes', ClassViewSet, basename='class')
 router.register(r'students', StudentViewSet, basename='student')
 router.register(r'teachers', TeacherViewSet, basename='teacher')
+router.register(r'users', UsersViewSet, basename='user')
 router.register(r'alumni', AlumniViewSet, basename='alumni')
 router.register(r'categories', CategoryViewSet, basename='category')
 router.register(r'posts', PostViewSet, basename='post')
@@ -47,6 +49,8 @@ router.register(r'comments', CommentViewSet, basename='comment')
 router.register(r'tahfidz', TahfidzViewSet, basename='tahfidz')
 router.register(r'targets', TargetViewSet, basename='target')
 router.register(r'tilawah', TilawahViewSet, basename='tilawah')
+router.register(r'subjects', SubjectViewSet, basename='subject')
+router.register(r'courses', CourseViewSet, basename='course')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -56,6 +60,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/exchange-token/', exchange_token, name='token_exchange'),    
     path('api/v1/tahfidz-app/', include('tahfidz.urls')),
+    path('upload/', ImageUploadView.as_view(), name='ckeditor_upload'),
     
 ]
 
