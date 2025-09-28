@@ -8,12 +8,12 @@ class StudentViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing Student instances.
     """
-    queryset = Student.objects.filter(student_status="Aktif")
+    queryset = Student.objects.select_related('student_class').filter(student_status="Aktif")
     serializer_class = StudentSerializer
     permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter]
-    search_fields = ['student_name', 'nis', 'nisn', 'student_class__class_name', 'student_class']
+    search_fields = ['student_name', 'nis', 'nisn', 'student_class__class_name']
 
 
     def get_queryset(self):

@@ -26,6 +26,7 @@ from achievements.views import PrestasiViewSet, ProgramPrestasiViewSet
 from alumni.views import AlumniViewSet
 from classes.views import ClassViewSet
 from courses.views import CourseViewSet, SubjectViewSet
+from extracurriculars.views import ExtracurricularViewSet
 from news.views import CategoryViewSet, CommentViewSet, ImageUploadView, PostViewSet
 from tahfidz.views import TahfidzViewSet, TargetViewSet, TilawahViewSet
 from teachers.views import TeacherViewSet, UsersViewSet
@@ -51,6 +52,7 @@ router.register(r'targets', TargetViewSet, basename='target')
 router.register(r'tilawah', TilawahViewSet, basename='tilawah')
 router.register(r'subjects', SubjectViewSet, basename='subject')
 router.register(r'courses', CourseViewSet, basename='course')
+router.register(r'extracurriculars', ExtracurricularViewSet, basename='extracurricular')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

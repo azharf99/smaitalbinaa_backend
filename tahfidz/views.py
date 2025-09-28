@@ -72,12 +72,12 @@ class TilawahQuickCreateView(APIView):
                         # Prepare the data for fields that will be updated or created.
                         defaults = {
                             'catatan': validated_data.get('catatan', ''),
-                            'kehadiran': student_data.get('kehadiran'),
-                            'halaman': student_data.get('halaman'),
-                            'surat': student_data.get('surat'),
-                            'ayat': student_data.get('ayat'),
-                            'kelancaran': student_data.get('kelancaran'),
-                            'tajwid': student_data.get('tajwid'),
+                            'kehadiran': student_data.get("kehadiran"),
+                            'halaman': student_data.get("halaman"),
+                            'surat': student_data.get("surat"),
+                            'ayat': student_data.get("ayat"),
+                            'kelancaran': student_data.get("kelancaran"),
+                            'tajwid': student_data.get("tajwid"),
                         }
 
                         # Use update_or_create to either update an existing record or create a new one.

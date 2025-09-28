@@ -2,14 +2,12 @@ academic_calendar ✅
 achievements ✅
 alumni ✅
 class_reports
-classes
-courses
-ckeditor
-ckeditor_uploader
+classes ✅
+courses ✅
 dashboard
 extracurricular_reports
 extracurricular_scores
-extracurriculars
+extracurriculars ✅
 news ✅ (MASIH ERROR UNTUK UPDATE ❌)
 notifications
 olympiads
