@@ -27,6 +27,7 @@ from alumni.views import AlumniViewSet
 from classes.views import ClassViewSet
 from courses.views import CourseViewSet, SubjectViewSet
 from extracurriculars.views import ExtracurricularViewSet
+from extracurricular_reports.views import ReportViewSet
 from extracurricular_scores.views import ScoreViewSet
 from news.views import CategoryViewSet, CommentViewSet, ImageUploadView, PostViewSet
 from private.views import GroupViewSet, PrivateSubjectViewSet, PrivateViewSet
@@ -55,6 +56,7 @@ router.register(r'tilawah', TilawahViewSet, basename='tilawah')
 router.register(r'subjects', SubjectViewSet, basename='subject')
 router.register(r'courses', CourseViewSet, basename='course')
 router.register(r'extracurriculars', ExtracurricularViewSet, basename='extracurricular')
+router.register(r'extracurricular-reports', ReportViewSet, basename='extracurricular-report')
 router.register(r'extracurricular-scores', ScoreViewSet, basename='extracurricular-score')
 router.register(r'private', PrivateViewSet, basename='private-lessons')
 router.register(r'private-subjects', PrivateSubjectViewSet, basename='private-subjects')
