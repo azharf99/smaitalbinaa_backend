@@ -33,12 +33,3 @@ class PrivateViewSet(viewsets.ModelViewSet):
     serializer_class = PrivateSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     pagination_class = StandardResultsSetPagination
-
-    def perform_create(self, serializer):
-        # Automatically set the 'pembimbing' to the currently logged-in user's teacher profile
-        if hasattr(self.request.user, 'teacher'):
-            serializer.save(pembimbing=self.request.user.teacher)
-        else:
-            # Handle cases where the user is not a teacher or has no teacher profile
-            # For now, we'll let it proceed and rely on serializer validation
-            serializer.save()
