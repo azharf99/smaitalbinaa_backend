@@ -28,6 +28,7 @@ from classes.views import ClassViewSet
 from courses.views import CourseViewSet, SubjectViewSet
 from extracurriculars.views import ExtracurricularViewSet
 from news.views import CategoryViewSet, CommentViewSet, ImageUploadView, PostViewSet
+from private.views import GroupViewSet, PrivateSubjectViewSet, PrivateViewSet
 from tahfidz.views import TahfidzViewSet, TargetViewSet, TilawahViewSet
 from teachers.views import TeacherViewSet, UsersViewSet
 from students.views import StudentViewSet
@@ -53,6 +54,9 @@ router.register(r'tilawah', TilawahViewSet, basename='tilawah')
 router.register(r'subjects', SubjectViewSet, basename='subject')
 router.register(r'courses', CourseViewSet, basename='course')
 router.register(r'extracurriculars', ExtracurricularViewSet, basename='extracurricular')
+router.register(r'private', PrivateViewSet, basename='private-lessons')
+router.register(r'private-subjects', PrivateSubjectViewSet, basename='private-subjects')
+router.register(r'private-groups', GroupViewSet, basename='private-groups')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

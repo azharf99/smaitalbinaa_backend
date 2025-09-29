@@ -6,7 +6,7 @@ classes ✅
 courses ✅
 dashboard
 extracurricular_reports
-extracurricular_scores
+extracurricular_scores 
 extracurriculars ✅
 news ✅ (MASIH ERROR UNTUK UPDATE ❌)
 notifications
