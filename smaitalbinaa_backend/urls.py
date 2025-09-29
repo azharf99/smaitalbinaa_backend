@@ -31,6 +31,7 @@ from extracurricular_reports.views import ReportViewSet
 from extracurricular_scores.views import ScoreViewSet
 from news.views import CategoryViewSet, CommentViewSet, ImageUploadView, PostViewSet
 from olympiads.views import OlympiadFieldViewSet, OlympiadReportViewSet
+from schedules.views import PeriodViewSet, ReporterScheduleViewSet, ScheduleViewSet
 from private.views import GroupViewSet, PrivateSubjectViewSet, PrivateViewSet
 from tahfidz.views import TahfidzViewSet, TargetViewSet, TilawahViewSet
 from teachers.views import TeacherViewSet, UsersViewSet
@@ -63,6 +64,9 @@ router.register(r'private', PrivateViewSet, basename='private-lessons')
 router.register(r'olympiad-fields', OlympiadFieldViewSet, basename='olympiad-field')
 router.register(r'olympiad-reports', OlympiadReportViewSet, basename='olympiad-report')
 router.register(r'private-subjects', PrivateSubjectViewSet, basename='private-subjects')
+router.register(r'periods', PeriodViewSet, basename='period')
+router.register(r'schedules', ScheduleViewSet, basename='schedule')
+router.register(r'reporter-schedules', ReporterScheduleViewSet, basename='reporter-schedule')
 router.register(r'private-groups', GroupViewSet, basename='private-groups')
 
 urlpatterns = [
