@@ -72,6 +72,16 @@ WEEKDAYS = {
     6: _("Ahad"),
 }
 
+WEEKDAYS_DICT = {
+    1: _("Senin"),
+    2: _("Selasa"),
+    3: _("Rabu"),
+    4: _("Kamis"),
+    5: _("Jumat"),
+    6: _("Sabtu"),
+    7: _("Ahad"),
+}
+
 INDONESIAN_DAYS_OPTIONS = (
     (None, _("Choose training Day")),
     ('Senin', _('Monday')),

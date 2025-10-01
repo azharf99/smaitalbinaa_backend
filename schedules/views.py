@@ -32,3 +32,13 @@ class ReporterScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = ReporterScheduleSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     pagination_class = StandardResultsSetPagination
+
+
+    def get_queryset(self):
+        tipe = self.request.GET.get('type')
+        day_search = self.request.GET.get('search')
+        if day_search and tipe:
+            self.pagination_class = None
+            return super().get_queryset().filter(schedule_day=day_search, type=tipe)
+        return super().get_queryset()
+

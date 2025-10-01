@@ -47,7 +47,7 @@ class Course(models.Model):
 
 
     def __str__(self) -> str:
-        return f"{self.course} | {self.teacher.teacher_name}"
+        return f"{self.course} | {self.teacher.short_name}"
     
     def clean(self):
         # Add validation to ensure consecutive periods make sense

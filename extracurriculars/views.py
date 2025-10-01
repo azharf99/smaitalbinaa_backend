@@ -34,9 +34,12 @@ class ExtracurricularViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Optionally filters by `search` query parameter on the `name` field."""
         search_query = self.request.query_params.get('search')
+        id_query = self.request.query_params.get('id')
         queryset = super().get_queryset()
         if search_query:
             queryset = queryset.filter(name__icontains=search_query)
+        if id_query:
+            queryset = queryset.filter(id=id_query)
         return queryset
     
 

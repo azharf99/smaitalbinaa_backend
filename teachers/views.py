@@ -33,7 +33,14 @@ class TeacherViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Optionally filters by `user_id` query parameter."""
         search_query = self.request.GET.get('search')
+        type_query = self.request.GET.get('type')
         if search_query:
             return super().get_queryset().filter(teacher_name__icontains=search_query)
+        if type_query == 'putra':
+            self.pagination_class = None
+            return super().get_queryset().filter(gender='L')
+        if type_query == 'putri':
+            self.pagination_class = None
+            return super().get_queryset().filter(gender='P')
         
         return super().get_queryset()

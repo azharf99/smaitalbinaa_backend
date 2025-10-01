@@ -23,6 +23,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework.routers import DefaultRouter
 from academic_calendar.views import AcademicCalendarViewSet
 from achievements.views import PrestasiViewSet, ProgramPrestasiViewSet
+from class_reports.views import NonTeacherReportViewSet, ReportViewSet as ClassReportViewSet, generate_report_by_date, set_current_reporter
 from alumni.views import AlumniViewSet
 from classes.views import ClassViewSet
 from courses.views import CourseViewSet, SubjectViewSet
@@ -46,6 +47,8 @@ router.register(r'achievements', PrestasiViewSet, basename='prestasi')
 router.register(r'achievements-program', ProgramPrestasiViewSet, basename='programprestasi')
 router.register(r'classes', ClassViewSet, basename='class')
 router.register(r'students', StudentViewSet, basename='student')
+router.register(r'class-reports', ClassReportViewSet, basename='class-report')
+router.register(r'non-teacher-reports', NonTeacherReportViewSet, basename='non-teacher-report')
 router.register(r'teachers', TeacherViewSet, basename='teacher')
 router.register(r'users', UsersViewSet, basename='user')
 router.register(r'alumni', AlumniViewSet, basename='alumni')
@@ -77,6 +80,8 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/exchange-token/', exchange_token, name='token_exchange'),    
     path('api/v1/tahfidz-app/', include('tahfidz.urls')),
+    path('api/v1/my-class-reports/quick-grid/generate/', generate_report_by_date, name='generate_report_for_current_date'),
+    path('api/v1/my-class-reports/quick-grid/set-reporter/', set_current_reporter, name='generate_report_for_current_reporter'),
     path('upload/', ImageUploadView.as_view(), name='ckeditor_upload'),
     
 ]

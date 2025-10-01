@@ -1,7 +1,7 @@
 academic_calendar ✅
 achievements ✅
 alumni ✅
-class_reports
+class_reports ✅
 classes ✅
 courses ✅
 dashboard
@@ -13,7 +13,7 @@ notifications
 olympiads ✅
 private ✅
 raker
-schedules 
+schedules ✅
 student_projects
 students ✅
 tahfidz ✅
