@@ -327,6 +327,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.twitter.TwitterOAuth',
 )
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_CLIENT_ID')
@@ -342,6 +343,14 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'public_profile']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email, first_name, last_name'
 }
+
+SOCIAL_AUTH_TWITTER_KEY = os.getenv('SOCIAL_AUTH_TWITTER_KEY')
+SOCIAL_AUTH_TWITTER_SECRET = os.getenv('SOCIAL_AUTH_TWITTER_SECRET')
+
+SOCIAL_AUTH_TWITTER_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_TWITTER_OAUTH2_KEY')
+SOCIAL_AUTH_TWITTER_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_TWITTER_OAUTH2_SECRET')
+
+SOCIAL_AUTH_TWITTER_OAUTH2_PKCE_CODE_CHALLENGE_METHOD = 's256'
 
 # This pipeline ensures user data from Facebook is saved to your User model
 SOCIAL_AUTH_PIPELINE = (
