@@ -377,6 +377,7 @@ if not DEBUG:
         "https://smaitalbinaa.pythonanywhere.com",
         "https://pythonanywhere.com",
         "https://smait.albinaa.sch.id",
+        "https://smaitalbinaa-frontend.vercel.app"
     ]
 
     CORS_ALLOW_METHODS = (
