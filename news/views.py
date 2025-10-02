@@ -21,7 +21,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    lookup_field = 'id'
 
     
 class PostViewSet(viewsets.ModelViewSet):
@@ -42,11 +41,6 @@ class PostViewSet(viewsets.ModelViewSet):
     }
 
 
-    def perform_create(self, serializer):
-        # Assuming the user is a teacher.
-        # You might need to adjust this based on your user model relationship.
-        serializer.save(author=self.request.user.teacher)
-
 class CommentViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows comments to be viewed or created.
@@ -54,11 +48,6 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.filter(active=True).order_by('-created_at')
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        # Assuming the user is a teacher.
-        # You might need to adjust this based on your user model relationship.
-        serializer.save(author=self.request.user.teacher)
     
     def get_queryset(self):
         """Optionally filters by `page_id` query parameter."""

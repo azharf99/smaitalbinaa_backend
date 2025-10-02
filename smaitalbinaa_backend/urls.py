@@ -23,6 +23,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework.routers import DefaultRouter
 from academic_calendar.views import AcademicCalendarViewSet
 from achievements.views import PrestasiViewSet, ProgramPrestasiViewSet
+from blog_test.views import BlogTestViewSet, CaterogytestViewSet
 from class_reports.views import NonTeacherReportViewSet, ReportViewSet as ClassReportViewSet, generate_report_by_date, set_current_reporter
 from alumni.views import AlumniViewSet
 from classes.views import ClassViewSet
@@ -71,6 +72,8 @@ router.register(r'periods', PeriodViewSet, basename='period')
 router.register(r'schedules', ScheduleViewSet, basename='schedule')
 router.register(r'reporter-schedules', ReporterScheduleViewSet, basename='reporter-schedule')
 router.register(r'private-groups', GroupViewSet, basename='private-groups')
+router.register(r'blog-test', BlogTestViewSet, basename='blog-test')
+router.register(r'category-test', CaterogytestViewSet, basename='category-test')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -1,8 +1,10 @@
 from rest_framework import serializers
 from teachers.models import Teacher
-from .models import Category, Post, Comment
+from .models import BlogTest, Caterogytest
 from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
+from taggit.models import Tag
+
 
 class TeacherSerializer(serializers.ModelSerializer):
     """
@@ -13,50 +15,34 @@ class TeacherSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
-class CategorySerializer(serializers.ModelSerializer):
+class CaterogytestSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Category
+        model = Caterogytest
         fields = '__all__'
 
 
 
-class CommentSerializer(serializers.ModelSerializer):
-    author = TeacherSerializer(read_only=True)
-    author_id = serializers.PrimaryKeyRelatedField(
-        queryset=Teacher.objects.all(), 
-        source="author", 
-        write_only=True,
-    )
-
-    class Meta:
-        model = Comment
-        fields = '__all__'
-
-
-
-class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
+class BlogTestSerializer(TaggitSerializer, serializers.ModelSerializer):
     """
-    Serializer for the Post model.
+    Serializer for the BlogTest model.
     Includes nested serializers for author and categories, and handles tags.
     """
+
     author = TeacherSerializer(read_only=True)
     author_id = serializers.PrimaryKeyRelatedField(
         queryset=Teacher.objects.all(), 
         source="author", 
         write_only=True,
     )
-
-    category = CategorySerializer(many=True, read_only=True)
-    category_ids = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all(), 
-        many=True, 
+    category = serializers.StringRelatedField(many=True, read_only=True)
+    category_id = serializers.PrimaryKeyRelatedField(
+        queryset=Caterogytest.objects.all(), 
         source="category", 
         write_only=True,
+        many=True,
     )
 
-    tags = TagListSerializerField()
 
     class Meta:
-        model = Post
+        model = BlogTest
         fields = '__all__'

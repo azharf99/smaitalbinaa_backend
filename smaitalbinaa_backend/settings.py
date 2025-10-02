@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     "corsheaders",
     'social_django',
     'django_filters',
+    'blog_test',
 ]
 
 

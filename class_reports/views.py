@@ -1,13 +1,12 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from rest_framework import viewsets, permissions
 from schedules.models import ReporterSchedule, Schedule
 from utils.constants import WEEKDAYS_DICT
 from utils.pagination import StandardResultsSetPagination
+from utils.permissions import HasModelPermission
 from .models import NonTeacherReport, Report
 from rest_framework.decorators import api_view, permission_classes as rest_permission_classes
 from .serializers import NonTeacherReportSerializer, ReportSerializer
-from classes.models import Class
-from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings as django_settings
 from django.utils import timezone
 
@@ -26,7 +25,7 @@ class ReportViewSet(viewsets.ModelViewSet):
         'schedule__teacher', 'subtitute_teacher', 'reporter'
     ).all().order_by('-report_date', 'schedule__schedule_time__number')
     serializer_class = ReportSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
 
 
@@ -45,11 +44,11 @@ class NonTeacherReportViewSet(viewsets.ModelViewSet):
     """
     queryset = NonTeacherReport.objects.select_related('teacher', 'schedule_time').all().order_by('-report_date', 'schedule_time__number')
     serializer_class = NonTeacherReportSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
 
 @api_view(['POST'])
-@rest_permission_classes([permissions.IsAuthenticated])
+@rest_permission_classes([permissions.IsAdminUser])
 def generate_report_by_date(request):
     """
     Generate reports for a given date based on existing schedules.
@@ -70,11 +69,12 @@ def generate_report_by_date(request):
         return JsonResponse({'message': 'No schedules for this day of the week.'}, status=200)
 
     # We can add filtering by type (e.g. 'Putra', 'Putri') if needed
-    schedules_for_day = Schedule.objects.filter(schedule_day=day_of_week)
+    schedules_for_day = Schedule.objects.prefetch_related('schedule_time').filter(schedule_day=day_of_week)
 
     reports_to_create = [
         Report(
             report_date=report_date,
+            reporter = ReporterSchedule.objects.select_related('reporter').filter(schedule_time=str(schedule.schedule_time.number), schedule_day=day_of_week).first().reporter or None,
             schedule=schedule,
             semester=django_settings.SEMESTER,
             academic_year=django_settings.TAHUN_AJARAN,
@@ -89,7 +89,7 @@ def generate_report_by_date(request):
 
 
 @api_view(['POST'])
-@rest_permission_classes([permissions.IsAuthenticated])
+@rest_permission_classes([permissions.IsAdminUser])
 def set_current_reporter(request):
     """
     Generate reports for a given date based on existing schedules.
@@ -112,6 +112,14 @@ def set_current_reporter(request):
         return JsonResponse({'message': 'No schedules for this day of the week.'}, status=200)
 
     # We can add filtering by type (e.g. 'Putra', 'Putri') if needed
-    Report.objects.filter(report_date=report_date, schedule__schedule_time__number=time_no).update(reporter_id=reporter_id)
+    report_objects = Report.objects.filter(report_date=report_date, schedule__schedule_time__number=time_no)
+    report_objects.update(reporter_id=reporter_id, is_submitted=True)
+    is_completed = True
+    for obj in report_objects:
+        if obj.status != "Hadir":
+            is_completed = False
+            break
+    report_objects.update(is_complete=is_completed)
+
     
     return JsonResponse({'message': f'Reporter for {report_date} and time {time_no} reports updated successfully.'}, status=201)
