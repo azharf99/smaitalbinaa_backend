@@ -32,6 +32,7 @@ from extracurriculars.views import ExtracurricularViewSet
 from extracurricular_reports.views import ReportViewSet
 from extracurricular_scores.views import ScoreViewSet
 from news.views import CategoryViewSet, CommentViewSet, ImageUploadView, PostViewSet
+from notifications.views import NotificationViewSet
 from olympiads.views import OlympiadFieldViewSet, OlympiadReportViewSet
 from schedules.views import PeriodViewSet, ReporterScheduleViewSet, ScheduleViewSet
 from private.views import GroupViewSet, PrivateSubjectViewSet, PrivateViewSet
@@ -74,6 +75,7 @@ router.register(r'reporter-schedules', ReporterScheduleViewSet, basename='report
 router.register(r'private-groups', GroupViewSet, basename='private-groups')
 router.register(r'blog-test', BlogTestViewSet, basename='blog-test')
 router.register(r'category-test', CaterogytestViewSet, basename='category-test')
+router.register(r'notifications', NotificationViewSet, basename='notification')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
