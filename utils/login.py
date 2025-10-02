@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 import urllib.parse
@@ -23,4 +24,4 @@ def exchange_token(request):
     # Redirect back to the React app with the tokens in the URL
     # In a real production app, you might use a more secure method
     # like setting HttpOnly cookies.
-    return redirect(f'http://localhost:5173/social-auth-callback?{params}')
+    return redirect(f'{settings.MY_FRONTEND_HOST}/social-auth-callback?{params}')
