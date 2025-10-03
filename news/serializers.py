@@ -23,11 +23,6 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     author = TeacherSerializer(read_only=True)
-    author_id = serializers.PrimaryKeyRelatedField(
-        queryset=Teacher.objects.all(), 
-        source="author", 
-        write_only=True,
-    )
 
     class Meta:
         model = Comment

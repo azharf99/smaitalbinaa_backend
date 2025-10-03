@@ -6,6 +6,7 @@ from django.conf import settings
 from rest_framework import viewsets, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 from teachers.models import Teacher
+from utils.middleware import SetCurrentUserMixin
 from utils.pagination import StandardResultsSetPagination
 from .models import Category, Post, Comment
 from .serializers import CategorySerializer, PostSerializer, CommentSerializer
@@ -14,7 +15,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 # Create your views here.
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(SetCurrentUserMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows categories to be viewed or edited.
     """
@@ -23,7 +24,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     
-class PostViewSet(viewsets.ModelViewSet):
+class PostViewSet(SetCurrentUserMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows posts to be viewed or edited.
     Published posts are visible to anyone, drafts are only visible to authenticated users.
@@ -41,13 +42,17 @@ class PostViewSet(viewsets.ModelViewSet):
     }
 
 
-class CommentViewSet(viewsets.ModelViewSet):
+class CommentViewSet(SetCurrentUserMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows comments to be viewed or created.
     """
     queryset = Comment.objects.filter(active=True).order_by('-created_at')
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user.teacher)
+        return super().perform_create(serializer)
     
     def get_queryset(self):
         """Optionally filters by `page_id` query parameter."""

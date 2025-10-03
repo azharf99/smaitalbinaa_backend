@@ -34,7 +34,7 @@ MAINTENANCE_MODE = False  # Set to True to enable maintenance mode
 PIKET_MODE_ON = True  # Set to True to enable maintenance mode
 
 if not DEBUG:
-    ALLOWED_HOSTS = ['azharfa.pythonanywhere.com', 'smaitalbinaa.pythonanywhere.com', 'smait.albinaa.sch.id']
+    ALLOWED_HOSTS = ['azharfa.pythonanywhere.com', 'smaitalbinaa.pythonanywhere.com', 'smait.albinaa.sch.id', 'localhost']
 else:
     ALLOWED_HOSTS = ['*']
 
@@ -42,6 +42,14 @@ else:
 ID_DEVICE = os.getenv('ID_DEVICE')
 API_KEY = os.getenv('API_KEY')
 TOKEN = os.getenv('TOKEN')
+
+# --- Admin Notification Settings ---
+# A list of all the people who get code error notifications.
+# When DEBUG=False, Django emails these people the details of exceptions raised in the request/response cycle.
+ADMINS = [
+    (os.getenv('ADMIN_NAME'), os.getenv('ADMIN_EMAIL')),
+]
+ADMIN_PHONE = os.getenv('ADMIN_PHONE')
 
 # Application definition
 
@@ -69,7 +77,7 @@ INSTALLED_APPS = [
     'extracurricular_reports',
     'extracurricular_scores',
     'extracurriculars',
-    'news',
+    'news.apps.NewsConfig',
     'notifications',
     'olympiads',
     'private',
@@ -99,6 +107,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'utils.middleware.CurrentUserMiddleware',
     'utils.maintenance_middleware.MaintenanceModeMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -426,21 +435,41 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
 
-    # LOGGING = {
-    #     'version': 1,
-    #     'disable_existing_loggers': False,
-    #     'handlers': {
-    #         'file': {
-    #             'level': 'DEBUG',
-    #             'class': 'logging.FileHandler',
-    #             'filename': os.path.join(BASE_DIR, 'logs', 'app.log'),
-    #         },
-    #     },
-    #     'loggers': {
-    #         'django': {
-    #             'handlers': ['file'],
-    #             'level': 'DEBUG',
-    #             'propagate': True,
-    #         },
-    #     },
-    # }
+    # --- Custom Error Reporting Endpoint ---
+    # Example: A webhook URL for Slack, Teams, or a custom service
+    ERROR_REPORTING_ENDPOINT = os.getenv('ERROR_REPORTING_ENDPOINT')
+    ERROR_REPORTING_TOKEN = os.getenv('ERROR_REPORTING_TOKEN')
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'filters': {
+            'require_debug_false': {
+                '()': 'django.utils.log.RequireDebugFalse',
+            },
+        },
+        'handlers': {
+            'mail_admins': {
+                'level': 'ERROR',
+                'filters': ['require_debug_false'],
+                'class': 'django.utils.log.AdminEmailHandler'
+            },
+            'api_endpoint_errors': {
+                'level': 'ERROR',
+                'filters': ['require_debug_false'],
+                'class': 'utils.logging_handlers.ApiEndpointErrorHandler',
+            },
+            'console': {
+                'level': 'INFO',
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'loggers': {
+            'django.request': {
+                # Send errors to both email and the custom API endpoint
+                'handlers': ['mail_admins', 'api_endpoint_errors'],
+                'level': 'ERROR',
+                'propagate': True,
+            },
+        },
+    }

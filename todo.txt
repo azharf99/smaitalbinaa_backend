@@ -8,8 +8,8 @@ dashboard
 extracurricular_reports ✅
 extracurricular_scores ✅
 extracurriculars ✅
-news ✅ (MASIH ERROR UNTUK UPDATE ❌)
-notifications
+news ✅
+notifications ✅
 olympiads ✅
 private ✅
 raker
