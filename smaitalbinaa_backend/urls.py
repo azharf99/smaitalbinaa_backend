@@ -36,6 +36,7 @@ from notifications.views import NotificationViewSet
 from olympiads.views import OlympiadFieldViewSet, OlympiadReportViewSet
 from schedules.views import PeriodViewSet, ReporterScheduleViewSet, ScheduleViewSet
 from private.views import GroupViewSet, PrivateSubjectViewSet, PrivateViewSet
+from student_projects.views import DailyPlanViewSet, ProjectViewSet, TeamViewSet
 from tahfidz.views import TahfidzViewSet, TargetViewSet, TilawahViewSet
 from teachers.views import TeacherViewSet, UsersViewSet
 from students.views import StudentViewSet
@@ -76,6 +77,9 @@ router.register(r'private-groups', GroupViewSet, basename='private-groups')
 router.register(r'blog-test', BlogTestViewSet, basename='blog-test')
 router.register(r'category-test', CaterogytestViewSet, basename='category-test')
 router.register(r'notifications', NotificationViewSet, basename='notification')
+router.register(r'student-project-teams', TeamViewSet, basename='student-project-team')
+router.register(r'student-projects', ProjectViewSet, basename='student-project')
+router.register(r'student-project-daily-plans', DailyPlanViewSet, basename='student-project-daily-plan')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
