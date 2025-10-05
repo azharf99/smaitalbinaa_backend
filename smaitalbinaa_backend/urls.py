@@ -34,6 +34,7 @@ from extracurricular_scores.views import ScoreViewSet
 from news.views import CategoryViewSet, CommentViewSet, ImageUploadView, PostViewSet
 from notifications.views import NotificationViewSet
 from olympiads.views import OlympiadFieldViewSet, OlympiadReportViewSet
+from raker.views import LaporanPertanggungJawabanViewSet, ProgramKerjaViewSet
 from schedules.views import PeriodViewSet, ReporterScheduleViewSet, ScheduleViewSet
 from private.views import GroupViewSet, PrivateSubjectViewSet, PrivateViewSet
 from student_projects.views import DailyPlanViewSet, ProjectViewSet, TeamViewSet
@@ -80,6 +81,8 @@ router.register(r'notifications', NotificationViewSet, basename='notification')
 router.register(r'student-project-teams', TeamViewSet, basename='student-project-team')
 router.register(r'student-projects', ProjectViewSet, basename='student-project')
 router.register(r'student-project-daily-plans', DailyPlanViewSet, basename='student-project-daily-plan')
+router.register(r'lpj', LaporanPertanggungJawabanViewSet, basename='lpj')
+router.register(r'proker', ProgramKerjaViewSet, basename='proker')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

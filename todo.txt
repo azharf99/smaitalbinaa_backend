@@ -12,9 +12,9 @@ news ✅
 notifications ✅
 olympiads ✅
 private ✅
-raker
+raker ✅
 schedules ✅
-student_projects
+student_projects ✅
 students ✅
 tahfidz ✅
 userlog

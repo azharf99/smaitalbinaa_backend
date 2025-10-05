@@ -68,7 +68,7 @@ def log_post_deletion(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Comment)
-def log_post_change(sender, instance, created, **kwargs):
+def log_comment_change(sender, instance, created, **kwargs):
     """
     Create a notification when a Comment is created or updated.
     """
@@ -81,7 +81,7 @@ def log_post_change(sender, instance, created, **kwargs):
 
     action = "created" if created else "updated"
     title = f"Comment {action.capitalize()}"
-    message = f"Comment {instance.body} on post'{instance.post.title}' was {action} by {user.teacher.teacher_name}."
+    message = f"Comment '{instance.body}' on post '{instance.post.title}' was {action} by {user.teacher.teacher_name}."
     print(action, title, message)
 
     # Create notifications for all admin teachers
@@ -94,7 +94,7 @@ def log_post_change(sender, instance, created, **kwargs):
 
 
 @receiver(post_delete, sender=Comment)
-def log_post_deletion(sender, instance, **kwargs):
+def log_comment_deletion(sender, instance, **kwargs):
     """
     Create a notification when a Comment is deleted.
     """
@@ -106,7 +106,7 @@ def log_post_deletion(sender, instance, **kwargs):
     
     title = "Comment Deleted"
     # Use user.teacher.teacher_name for consistency and to avoid potential errors if user has no teacher profile.
-    message = f"Comment {instance.body} on post '{instance.post.title}' was deleted by {user.teacher.teacher_name}."
+    message = f"Comment '{instance.body}' on post '{instance.post.title}' was deleted by {user.teacher.teacher_name}."
     
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()
@@ -117,7 +117,7 @@ def log_post_deletion(sender, instance, **kwargs):
     Notification.objects.bulk_create(notifications_to_create)
 
 @receiver(post_save, sender=Category)
-def log_post_change(sender, instance, created, **kwargs):
+def log_category_change(sender, instance, created, **kwargs):
     """
     Create a notification when a Category is created or updated.
     """
@@ -143,7 +143,7 @@ def log_post_change(sender, instance, created, **kwargs):
 
 
 @receiver(post_delete, sender=Category)
-def log_post_deletion(sender, instance, **kwargs):
+def log_category_deletion(sender, instance, **kwargs):
     """
     Create a notification when a Category is deleted.
     """

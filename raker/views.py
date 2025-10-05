@@ -1,3 +1,22 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from utils.pagination import StandardResultsSetPagination
+from .models import LaporanPertanggungJawaban, ProgramKerja
+from .serializers import LaporanPertanggungJawabanSerializer, ProgramKerjaSerializer
 
-# Create your views here.
+
+class LaporanPertanggungJawabanViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Laporan Pertanggung Jawaban (LPJ) to be viewed or edited.
+    """
+    queryset = LaporanPertanggungJawaban.objects.all().order_by('-tahun_ajaran', 'program')
+    serializer_class = LaporanPertanggungJawabanSerializer
+    pagination_class = StandardResultsSetPagination
+
+
+class ProgramKerjaViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Program Kerja (Proker) to be viewed or edited.
+    """
+    queryset = ProgramKerja.objects.all().order_by('-tahun_ajaran', 'program')
+    serializer_class = ProgramKerjaSerializer
+    pagination_class = StandardResultsSetPagination
