@@ -26,10 +26,10 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False    # Set to True to enable debug mode
+DEBUG = True    # Set to True to enable debug mode
 MAINTENANCE_MODE = False  # Set to True to enable maintenance mode
 PIKET_MODE_ON = True  # Set to True to enable maintenance mode
 
@@ -39,10 +39,6 @@ else:
     ALLOWED_HOSTS = ['*']
 
 
-ID_DEVICE = os.getenv('ID_DEVICE')
-API_KEY = os.getenv('API_KEY')
-TOKEN = os.getenv('TOKEN')
-
 # --- Admin Notification Settings ---
 # A list of all the people who get code error notifications.
 # When DEBUG=False, Django emails these people the details of exceptions raised in the request/response cycle.
@@ -51,6 +47,8 @@ ADMINS = [
 ]
 ADMIN_PHONE = os.getenv('ADMIN_PHONE')
 
+WABLAS_TOKEN = os.getenv('WABLAS_TOKEN')
+SENDER_ALBINAA_PHONE = os.getenv('SENDER_ALBINAA_PHONE')
 # Application definition
 
 INSTALLED_APPS = [
@@ -102,6 +100,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'utils.middleware.NormalizePathMiddleware', # Add this line
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
@@ -182,8 +181,8 @@ else:
                 'NAME' : os.getenv('LOCAL_MYSQL_DB_NAME'),
                 'USER' : os.getenv('LOCAL_MYSQL_DB_USER'),
                 'PASSWORD' : os.getenv('LOCAL_MYSQL_DB_PASSWORD'),
-                'HOST' : os.getenv('LOCAL_MYSQL_DB_HOST'),
-                'PORT' : os.getenv('LOCAL_MYSQL_DB_PORT'),
+                'HOST' : os.getenv('LOCAL_MYSQL_DB_HOST', 'db'), # Default to 'db' for Docker, override for local non-Docker dev
+                'PORT' : os.getenv('LOCAL_MYSQL_DB_PORT', '3306'), # Default to 3306 for inter-container communication
                 "OPTIONS": {
                     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
                     'charset': 'utf8mb4',

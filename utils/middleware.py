@@ -1,5 +1,7 @@
 import threading
 
+from django.http import HttpRequest, HttpResponse
+
 # Thread-local storage to hold the current user
 _user = threading.local()
 
@@ -35,3 +37,14 @@ class SetCurrentUserMixin:
     def initial(self, request, *args, **kwargs):
         _user.value = request.user
         super().initial(request, *args, **kwargs)
+
+
+
+class NormalizePathMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        # Remove leading slashes from the path
+        request.path_info = '/' + request.path_info.lstrip('/')
+        return self.get_response(request)
