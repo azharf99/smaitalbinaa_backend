@@ -5,7 +5,7 @@ from notifications.models import Notification
 from teachers.models import Teacher
 from utils.middleware import get_current_user
 from utils.wa import send_message_individual_from_albinaa
-from .models import Class
+from .models import Score
 
 
 def get_admin_teachers():
@@ -14,10 +14,10 @@ def get_admin_teachers():
     return Teacher.objects.filter(user__in=admin_users)
 
 
-@receiver(post_save, sender=Class)
-def log_class_change(sender, instance, created, **kwargs):
+@receiver(post_save, sender=Score)
+def log_extracurricular_score_change(sender, instance, created, **kwargs):
     """
-    Create a notification when a Class is created or updated.
+    Create a notification when a Extracurricular Score is created or updated.
     """
     user = get_current_user()
     if not user:
@@ -26,8 +26,8 @@ def log_class_change(sender, instance, created, **kwargs):
         return  # Do nothing if the user has no associated teacher profile
 
     action = "created" if created else "updated"
-    title = f"Class {action.capitalize()}"
-    message = f"Class '{instance.class_name}' was {action} by {user.teacher.teacher_name}."
+    title = f"Extracurricular Score {action.capitalize()}"
+    message = f"Extracurricular Score {instance.student.student_name} {instance.extracurricular.name} was {action} by {user.teacher.teacher_name}."
 
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()
@@ -39,10 +39,10 @@ def log_class_change(sender, instance, created, **kwargs):
     send_message_individual_from_albinaa(phone=user.teacher.phone, message=message)
 
 
-@receiver(post_delete, sender=Class)
-def log_class_deletion(sender, instance, **kwargs):
+@receiver(post_delete, sender=Score)
+def log_extracurricular_score_deletion(sender, instance, **kwargs):
     """
-    Create a notification when a Class is deleted.
+    Create a notification when a Extracurricular Score is deleted.
     """
     user = get_current_user()
     if not user:
@@ -51,9 +51,9 @@ def log_class_deletion(sender, instance, **kwargs):
     if not hasattr(user, 'teacher'):
         return  # Do nothing if the user has no associated teacher profile
     
-    title = "Class Deleted"
+    title = "Extracurricular Score Deleted"
     # Use user.teacher.teacher_name for consistency and to avoid potential errors if user has no teacher profile.
-    message = f"Class '{instance.class_name}' was deleted by {user.teacher.teacher_name}."
+    message = f"Extracurricular Score {instance.student.student_name} {instance.extracurricular.name} was deleted by {user.teacher.teacher_name}."
     
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()

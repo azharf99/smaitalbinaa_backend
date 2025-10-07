@@ -27,7 +27,7 @@ def log_course_change(sender, instance, created, **kwargs):
 
     action = "created" if created else "updated"
     title = f"Course {action.capitalize()}"
-    message = f"Course '{instance.name}' was {action} by {user.teacher.teacher_name}."
+    message = f"Course '{instance.course}' was {action} by {user.teacher.teacher_name}."
 
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()
@@ -53,7 +53,7 @@ def log_course_deletion(sender, instance, **kwargs):
     
     title = "Course Deleted"
     # Use user.teacher.teacher_name for consistency and to avoid potential errors if user has no teacher profile.
-    message = f"Course '{instance.name}' was deleted by {user.teacher.teacher_name}."
+    message = f"Course '{instance.course}' was deleted by {user.teacher.teacher_name}."
     
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()

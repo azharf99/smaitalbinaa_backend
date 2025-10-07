@@ -28,7 +28,7 @@ def log_class_report_change(sender, instance, created, **kwargs):
 
     action = "created" if created else "updated"
     title = f"Class Report {action.capitalize()}"
-    message = f"Class Report '{instance.name}' was {action} by {user.teacher.teacher_name}."
+    message = f"Class Report '{instance.report_date}' was {action} by {user.teacher.teacher_name}."
 
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()
@@ -54,7 +54,7 @@ def log_class_report_deletion(sender, instance, **kwargs):
     
     title = "Class Report Deleted"
     # Use user.teacher.teacher_name for consistency and to avoid potential errors if user has no teacher profile.
-    message = f"Class Report '{instance.name}' was deleted by {user.teacher.teacher_name}."
+    message = f"Class Report '{instance.report_date}' was deleted by {user.teacher.teacher_name}."
     
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()
