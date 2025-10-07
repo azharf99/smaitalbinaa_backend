@@ -2,6 +2,7 @@ from rest_framework import viewsets, permissions
 
 from django.db import transaction
 from teachers.models import Teacher
+from utils.permissions import HasModelPermission
 from .models import Tahfidz, Target, Tilawah
 from .serializers import QuickTilawahCreateSerializer, TahfidzSerializer, TargetSerializer, TilawahSerializer
 from rest_framework.views import APIView
@@ -19,6 +20,7 @@ class TahfidzViewSet(viewsets.ModelViewSet):
     queryset = Tahfidz.objects.all().order_by('-created_at')
     serializer_class = TahfidzSerializer
     pagination_class = StandardResultsSetPagination
+    permission_classes = [HasModelPermission]
 
 
 class TargetViewSet(viewsets.ModelViewSet):
@@ -28,6 +30,7 @@ class TargetViewSet(viewsets.ModelViewSet):
     queryset = Target.objects.all().order_by('-tanggal')
     serializer_class = TargetSerializer
     pagination_class = StandardResultsSetPagination
+    permission_classes = [HasModelPermission]
 
     def get_queryset(self):
         """Optionally filters by `user_id` query parameter."""
@@ -45,6 +48,7 @@ class TilawahViewSet(viewsets.ModelViewSet):
     queryset = Tilawah.objects.all().order_by('-tanggal', 'santri')
     serializer_class = TilawahSerializer
     pagination_class = StandardResultsSetPagination
+    permission_classes = [HasModelPermission]
 
 
 class TilawahQuickCreateView(APIView):

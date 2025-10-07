@@ -1,5 +1,6 @@
 from rest_framework import viewsets, permissions
 from utils.pagination import StandardResultsSetPagination
+from utils.permissions import HasModelPermission
 from .models import Subject, Group, Private
 from .serializers import SubjectSerializer, GroupSerializer, PrivateSerializer
 
@@ -11,7 +12,7 @@ class PrivateSubjectViewSet(viewsets.ModelViewSet):
     """
     queryset = Subject.objects.prefetch_related('pembimbing').all().order_by('nama_pelajaran')
     serializer_class = SubjectSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
 
 
@@ -21,7 +22,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.select_related('pelajaran').all().order_by('nama_kelompok')
     serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
 
 
@@ -31,5 +32,5 @@ class PrivateViewSet(viewsets.ModelViewSet):
     """
     queryset = Private.objects.select_related('pembimbing', 'pelajaran', 'kelompok').prefetch_related('kehadiran_santri').all().order_by('-tanggal_bimbingan')
     serializer_class = PrivateSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination

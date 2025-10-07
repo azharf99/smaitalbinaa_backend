@@ -1,5 +1,6 @@
 from rest_framework import viewsets, permissions
 from utils.pagination import StandardResultsSetPagination
+from utils.permissions import HasModelPermission
 from .models import Period, ReporterSchedule, Schedule
 from .serializers import (
     PeriodSerializer, ReporterScheduleSerializer, ScheduleSerializer
@@ -13,7 +14,7 @@ class PeriodViewSet(viewsets.ModelViewSet):
     """
     queryset = Period.objects.all().order_by('number', 'type')
     serializer_class = PeriodSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
 
 
@@ -23,14 +24,14 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     """
     queryset = Schedule.objects.select_related('schedule_time', 'schedule_course__course', 'schedule_course__teacher', 'schedule_class', 'teacher').all().order_by('schedule_day', 'schedule_time__number', 'schedule_class__class_name')
     serializer_class = ScheduleSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
 
 
 class ReporterScheduleViewSet(viewsets.ModelViewSet):
     queryset = ReporterSchedule.objects.select_related('reporter').all().order_by('schedule_day', 'schedule_time')
     serializer_class = ReporterScheduleSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
 
 

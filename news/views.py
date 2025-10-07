@@ -8,6 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from teachers.models import Teacher
 from utils.middleware import SetCurrentUserMixin
 from utils.pagination import StandardResultsSetPagination
+from utils.permissions import HasModelPermission
 from .models import Category, Post, Comment
 from .serializers import CategorySerializer, PostSerializer, CommentSerializer
 
@@ -21,7 +22,7 @@ class CategoryViewSet(SetCurrentUserMixin, viewsets.ModelViewSet):
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [HasModelPermission]
 
     
 class PostViewSet(SetCurrentUserMixin, viewsets.ModelViewSet):
@@ -31,7 +32,7 @@ class PostViewSet(SetCurrentUserMixin, viewsets.ModelViewSet):
     """
     queryset = Post.objects.filter(status='published')
     serializer_class = PostSerializer
-    permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]    
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
     filter_backends = [DjangoFilterBackend]
     filterset_fields = {
@@ -48,7 +49,7 @@ class CommentViewSet(SetCurrentUserMixin, viewsets.ModelViewSet):
     """
     queryset = Comment.objects.filter(active=True).order_by('-created_at')
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [HasModelPermission]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user.teacher)

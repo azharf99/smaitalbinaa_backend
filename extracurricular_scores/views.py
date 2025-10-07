@@ -1,5 +1,6 @@
 from rest_framework import viewsets, permissions
 from utils.pagination import StandardResultsSetPagination
+from utils.permissions import HasModelPermission
 from .models import Score
 from .serializers import ScoreSerializer
 
@@ -11,5 +12,5 @@ class ScoreViewSet(viewsets.ModelViewSet):
     """
     queryset = Score.objects.select_related('student', 'extracurricular').all().order_by('student', 'extracurricular')
     serializer_class = ScoreSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination

@@ -41,7 +41,7 @@ def log_tahfidz_change(sender, instance, created, **kwargs):
 
     action = "created" if created else "updated"
     title = f"Teacher {action.capitalize()}"
-    message = f"Teacher {instance.santri.student_name} was {action} by {user.teacher.teacher_name}."
+    message = f"Teacher {instance.teacher_name} was {action} by {user.teacher.teacher_name}."
 
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()
@@ -67,7 +67,7 @@ def log_tahfidz_deletion(sender, instance, **kwargs):
     
     title = "Teacher Deleted"
     # Use user.teacher.teacher_name for consistency and to avoid potential errors if user has no teacher profile.
-    message = f"Teacher {instance.santri.student_name} was deleted by {user.teacher.teacher_name}."
+    message = f"Teacher {instance.teacher_name} was deleted by {user.teacher.teacher_name}."
     
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()

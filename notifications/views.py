@@ -3,6 +3,7 @@ from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from teachers.models import Teacher
 from utils.pagination import StandardResultsSetPagination
+from utils.permissions import HasModelPermission
 from .models import Notification
 from .serializers import NotificationSerializer
 
@@ -11,7 +12,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
     API endpoint that allows notifications to be viewed or edited.
     """
     serializer_class = NotificationSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):

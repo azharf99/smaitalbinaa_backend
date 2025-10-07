@@ -1,5 +1,6 @@
 from rest_framework import viewsets, permissions
 from utils.pagination import StandardResultsSetPagination
+from utils.permissions import HasModelPermission
 from .models import Report
 from .serializers import ReportSerializer
 
@@ -11,5 +12,5 @@ class ReportViewSet(viewsets.ModelViewSet):
     """
     queryset = Report.objects.select_related('extracurricular').prefetch_related('teacher', 'students').all().order_by('-report_date')
     serializer_class = ReportSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination

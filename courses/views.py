@@ -3,6 +3,7 @@ import csv
 import io
 from django_filters.rest_framework import DjangoFilterBackend
 from utils.pagination import StandardResultsSetPagination
+from utils.permissions import HasModelPermission
 from .models import Course, Subject
 from .serializers import CourseSerializer, SubjectSerializer
 from rest_framework.decorators import action
@@ -16,7 +17,7 @@ class SubjectViewSet(viewsets.ModelViewSet):
     """
     queryset = Subject.objects.all().order_by('name')
     serializer_class = SubjectSerializer
-    permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
 
     @action(detail=False, methods=['post'], parser_classes=[MultiPartParser])
@@ -66,7 +67,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     """
     queryset = Course.objects.select_related('course', 'teacher', 'class_assigned').all()
     serializer_class = CourseSerializer
-    permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]
+    permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['class_assigned', 'teacher', 'type']
