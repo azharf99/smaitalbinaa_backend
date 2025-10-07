@@ -1,12 +1,11 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.contrib.auth.models import User
-
 from notifications.models import Notification
 from teachers.models import Teacher
 from utils.middleware import get_current_user
 from utils.wa import send_message_individual_from_albinaa
-from .models import Post, Category, Comment
+from .models import Course, Subject
 
 
 def get_admin_teachers():
@@ -15,10 +14,10 @@ def get_admin_teachers():
     return Teacher.objects.filter(user__in=admin_users)
 
 
-@receiver(post_save, sender=Post)
-def log_post_change(sender, instance, created, **kwargs):
+@receiver(post_save, sender=Course)
+def log_course_change(sender, instance, created, **kwargs):
     """
-    Create a notification when a Post is created or updated.
+    Create a notification when a Course is created or updated.
     """
     user = get_current_user()
     if not user:
@@ -27,8 +26,8 @@ def log_post_change(sender, instance, created, **kwargs):
         return  # Do nothing if the user has no associated teacher profile
 
     action = "created" if created else "updated"
-    title = f"Post {action.capitalize()}"
-    message = f"Post '{instance.title}' was {action} by {user.teacher.teacher_name}."
+    title = f"Course {action.capitalize()}"
+    message = f"Course '{instance.name}' was {action} by {user.teacher.teacher_name}."
 
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()
@@ -40,10 +39,10 @@ def log_post_change(sender, instance, created, **kwargs):
     send_message_individual_from_albinaa(phone=user.teacher.phone, message=message)
 
 
-@receiver(post_delete, sender=Post)
-def log_post_deletion(sender, instance, **kwargs):
+@receiver(post_delete, sender=Course)
+def log_course_deletion(sender, instance, **kwargs):
     """
-    Create a notification when a Post is deleted.
+    Create a notification when a Course is deleted.
     """
     user = get_current_user()
     if not user:
@@ -52,9 +51,9 @@ def log_post_deletion(sender, instance, **kwargs):
     if not hasattr(user, 'teacher'):
         return  # Do nothing if the user has no associated teacher profile
     
-    title = "Post Deleted"
+    title = "Course Deleted"
     # Use user.teacher.teacher_name for consistency and to avoid potential errors if user has no teacher profile.
-    message = f"Post '{instance.title}' was deleted by {user.teacher.teacher_name}."
+    message = f"Course '{instance.name}' was deleted by {user.teacher.teacher_name}."
     
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()
@@ -66,12 +65,10 @@ def log_post_deletion(sender, instance, **kwargs):
     send_message_individual_from_albinaa(phone=user.teacher.phone, message=message)
 
 
-
-
-@receiver(post_save, sender=Comment)
-def log_comment_change(sender, instance, created, **kwargs):
+@receiver(post_save, sender=Subject)
+def log_subject_change(sender, instance, created, **kwargs):
     """
-    Create a notification when a Comment is created or updated.
+    Create a notification when a Subject is created or updated.
     """
     user = get_current_user()
     if not user:
@@ -80,34 +77,34 @@ def log_comment_change(sender, instance, created, **kwargs):
         return  # Do nothing if the user has no associated teacher profile
 
     action = "created" if created else "updated"
-    title = f"Comment {action.capitalize()}"
-    message = f"Comment '{instance.body}' on post '{instance.post.title}' was {action} by {user.teacher.teacher_name}."
+    title = f"Subject {action.capitalize()}"
+    message = f"Subject '{instance.name}' was {action} by {user.teacher.teacher_name}."
 
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()
     notifications_to_create = [
-        Notification(teacher=teacher, title=title, message=message, type='INFO')
+        Notification(teacher=teacher, title=title, message=message, type='info')
         for teacher in admin_teachers
     ]
     Notification.objects.bulk_create(notifications_to_create)
     send_message_individual_from_albinaa(phone=user.teacher.phone, message=message)
 
 
-
-@receiver(post_delete, sender=Comment)
-def log_comment_deletion(sender, instance, **kwargs):
+@receiver(post_delete, sender=Subject)
+def log_subject_deletion(sender, instance, **kwargs):
     """
-    Create a notification when a Comment is deleted.
+    Create a notification when a Subject is deleted.
     """
     user = get_current_user()
     if not user:
         return
+    
     if not hasattr(user, 'teacher'):
         return  # Do nothing if the user has no associated teacher profile
     
-    title = "Comment Deleted"
+    title = "Subject Deleted"
     # Use user.teacher.teacher_name for consistency and to avoid potential errors if user has no teacher profile.
-    message = f"Comment '{instance.body}' on post '{instance.post.title}' was deleted by {user.teacher.teacher_name}."
+    message = f"Subject '{instance.name}' was deleted by {user.teacher.teacher_name}."
     
     # Create notifications for all admin teachers
     admin_teachers = get_admin_teachers()
@@ -119,52 +116,3 @@ def log_comment_deletion(sender, instance, **kwargs):
     send_message_individual_from_albinaa(phone=user.teacher.phone, message=message)
 
 
-@receiver(post_save, sender=Category)
-def log_category_change(sender, instance, created, **kwargs):
-    """
-    Create a notification when a Category is created or updated.
-    """
-    user = get_current_user()
-    if not user:
-        return  # Do nothing if the action was not performed by a user (e.g., in a shell)
-    if not hasattr(user, 'teacher'):
-        return  # Do nothing if the user has no associated teacher profile
-
-    action = "created" if created else "updated"
-    title = f"Category {action.capitalize()}"
-    message = f"Category '{instance.name}' was {action} by {user.teacher.teacher_name}."
-
-    # Create notifications for all admin teachers
-    admin_teachers = get_admin_teachers()
-    notifications_to_create = [
-        Notification(teacher=teacher, title=title, message=message, type='INFO')
-        for teacher in admin_teachers
-    ]
-    Notification.objects.bulk_create(notifications_to_create)
-    send_message_individual_from_albinaa(phone=user.teacher.phone, message=message)
-
-
-
-@receiver(post_delete, sender=Category)
-def log_category_deletion(sender, instance, **kwargs):
-    """
-    Create a notification when a Category is deleted.
-    """
-    user = get_current_user()
-    if not user:
-        return
-    if not hasattr(user, 'teacher'):
-        return  # Do nothing if the user has no associated teacher profile
-    
-    title = "Category Deleted"
-    # Use user.teacher.teacher_name for consistency and to avoid potential errors if user has no teacher profile.
-    message = f"Category '{instance.name}' was deleted by {user.teacher.teacher_name}."
-    
-    # Create notifications for all admin teachers
-    admin_teachers = get_admin_teachers()
-    notifications_to_create = [
-        Notification(teacher=teacher, title=title, message=message, type='warning')
-        for teacher in admin_teachers
-    ]
-    Notification.objects.bulk_create(notifications_to_create)
-    send_message_individual_from_albinaa(phone=user.teacher.phone, message=message)

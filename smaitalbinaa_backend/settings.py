@@ -34,7 +34,7 @@ MAINTENANCE_MODE = False  # Set to True to enable maintenance mode
 PIKET_MODE_ON = True  # Set to True to enable maintenance mode
 
 if not DEBUG:
-    ALLOWED_HOSTS = ['azharfa.pythonanywhere.com', 'smaitalbinaa.pythonanywhere.com', 'smait.albinaa.sch.id', 'localhost']
+    ALLOWED_HOSTS = ['azharfa.pythonanywhere.com', 'smaitalbinaa.pythonanywhere.com', 'smait.albinaa.sch.id']
 else:
     ALLOWED_HOSTS = ['*']
 
