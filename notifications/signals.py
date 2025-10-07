@@ -13,7 +13,7 @@ admin_phone = settings.ADMIN_PHONE
 
 
 @receiver(post_save, sender=Notification)
-def log_extracurricular_change(sender, instance, created, **kwargs):
+def log_notification_change(sender, instance, created, **kwargs):
     """
     Create a notification when a Notification is created or updated.
     """
@@ -30,7 +30,7 @@ def log_extracurricular_change(sender, instance, created, **kwargs):
 
 
 @receiver(post_delete, sender=Notification)
-def log_extracurricular_deletion(sender, instance, **kwargs):
+def log_notification_deletion(sender, instance, **kwargs):
     """
     Create a notification when a Notification is deleted.
     """
