@@ -383,7 +383,7 @@ CORS_ALLOWED_ORIGINS = [
 if DEBUG:
     MY_FRONTEND_HOST = "http://localhost:5173"
 else:
-    MY_FRONTEND_HOST = "https://smaitalbinaa-frontend.vercel.app"
+    MY_FRONTEND_HOST = "https://app.azharfa.my.id"
 
 
 SIMPLE_JWT = {
