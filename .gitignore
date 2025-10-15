@@ -1,5 +1,6 @@
 .env
 .env.example
+.env.prod
 node_modules
 __pycache__/
 db.sqlite3

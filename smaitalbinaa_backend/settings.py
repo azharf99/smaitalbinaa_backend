@@ -29,14 +29,14 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True    # Set to True to enable debug mode
+DEBUG = os.getenv('DEBUG', False).lower() in ('true', '1', 't')
 MAINTENANCE_MODE = False  # Set to True to enable maintenance mode
 PIKET_MODE_ON = True  # Set to True to enable maintenance mode
 
-if not DEBUG:
-    ALLOWED_HOSTS = ['azharfa.pythonanywhere.com', 'smaitalbinaa.pythonanywhere.com', 'smait.albinaa.sch.id']
-else:
-    ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS_str = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1')
+ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_str.split(',')]
+if DEBUG:
+    ALLOWED_HOSTS.append('*')
 
 
 # --- Admin Notification Settings ---
@@ -433,6 +433,11 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
+
+    # Required for SECURE_SSL_REDIRECT when behind a reverse proxy like Nginx
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
 
     # --- Custom Error Reporting Endpoint ---
     # Example: A webhook URL for Slack, Teams, or a custom service

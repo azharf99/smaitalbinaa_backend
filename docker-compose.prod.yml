@@ -1,0 +1,47 @@
+services:
+  backend:
+    build: .
+    container_name: smait-backend-prod
+    command: gunicorn smaitalbinaa_backend.wsgi:application --bind 0.0.0.0:8000 --workers 2 --threads 4 --timeout 120
+    volumes:
+      - staticfiles_volume:/app/staticfiles
+      - media_volume:/app/media
+    expose:
+      - 8000
+    env_file:
+      - .env.prod
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    container_name: smait-db-prod
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${LOCAL_MYSQL_DB_NAME}
+      MYSQL_USER: ${LOCAL_MYSQL_DB_USER}
+      MYSQL_PASSWORD: ${LOCAL_MYSQL_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${LOCAL_MYSQL_ROOT_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  nginx:
+    build: ./nginx
+    container_name: smait-nginx-prod
+    volumes:
+      - staticfiles_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
+  staticfiles_volume:
+  media_volume:

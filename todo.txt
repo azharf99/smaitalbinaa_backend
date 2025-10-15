@@ -19,3 +19,70 @@ students ✅
 tahfidz ✅
 userlog
 teachers ✅
+
+
+3. Hosting Provider & Server Setup
+You need a server (a Virtual Private Server or VPS) where you can run Docker.
+
+Popular Choices: DigitalOcean, Linode, Vultr, AWS EC2, Google Cloud Compute Engine.
+Recommendation for Beginners: A DigitalOcean Droplet or Linode Nanode is a great starting point. They are cost-effective and have excellent documentation.
+On your new server:
+
+Install Docker and Docker Compose: Follow the official installation guide for your chosen Linux distribution (usually Ubuntu).
+Clone Your Project: git clone <your-repo-url> onto the server.
+Create the .env.prod file: On the server, create the .env.prod file and fill it with your production secrets.
+4. Deployment Steps
+On your production server, navigate to your project directory and run these commands:
+
+Build and Start the Containers:
+
+sh
+docker-compose -f docker-compose.prod.yml up --build -d
+-f docker-compose.prod.yml: Specifies to use your production config.
+--build: Rebuilds the images if the code or Dockerfiles have changed.
+-d: Runs the containers in the background.
+Run Database Migrations:
+
+sh
+docker-compose -f docker-compose.prod.yml exec backend python manage.py migrate
+Collect Static Files: This command collects all static files from your Django apps and puts them into the staticfiles volume, where Nginx can serve them.
+
+sh
+docker-compose -f docker-compose.prod.yml exec backend python manage.py collectstatic --no-input
+Create a Superuser:
+
+sh
+docker-compose -f docker-compose.prod.yml exec backend python manage.py createsuperuser
+Your site should now be accessible via your server's IP address!
+
+
+5. Setting Up Your Domain & HTTPS
+DNS A Record: Go to your domain registrar (where you bought your domain) and create an A record.
+
+Host/Name: @ (for yourdomain.com)
+Value/Points to: Your server's public IP address.
+Create another A record for www if you want www.yourdomain.com to work as well.
+Install Certbot for Free SSL: Once DNS has propagated (can take a few minutes to a few hours), you can get a free SSL certificate from Let's Encrypt using Certbot.
+
+On your server, run this command. It will temporarily stop your Nginx container, use the port to get a certificate, and then modify your nginx.conf to enable HTTPS automatically.
+
+sh
+# Stop your Nginx container so Certbot can use port 80
+docker-compose -f docker-compose.prod.yml stop nginx
+
+# Run Certbot
+docker run -it --rm -p 80:80 --name certbot \
+  -v "/etc/letsencrypt:/etc/letsencrypt" \
+  -v "/var/lib/letsencrypt:/var/lib/letsencrypt" \
+  certbot/certbot certonly --standalone -d yourdomain.com -d www.yourdomain.com
+
+# Certbot will ask for your email and to agree to the terms.
+# After it succeeds, restart your services.
+docker-compose -f docker-compose.prod.yml up -d --force-recreate nginx
+You will also need to modify your nginx.conf to use the new certificates. Certbot provides instructions, but it typically involves adding these lines inside your server block:
+
+nginx
+listen 443 ssl;
+ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+You'll need to volume mount the /etc/letsencrypt directory into your Nginx container for it to access the certs.
