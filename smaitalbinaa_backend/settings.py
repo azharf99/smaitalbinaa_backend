@@ -34,7 +34,9 @@ MAINTENANCE_MODE = False  # Set to True to enable maintenance mode
 PIKET_MODE_ON = True  # Set to True to enable maintenance mode
 
 ALLOWED_HOSTS_str = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1')
+ALLOWED_FULL_HOSTS_str = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1')
 ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_str.split(',')]
+ALLOWED_FULL_HOSTS = [host.strip() for host in ALLOWED_FULL_HOSTS_str.split(',')]
 if DEBUG:
     ALLOWED_HOSTS.append('*')
 
@@ -375,7 +377,7 @@ SOCIAL_AUTH_PIPELINE = (
 
 
 CORS_ALLOWED_ORIGINS = [
-    *ALLOWED_HOSTS
+    *ALLOWED_FULL_HOSTS
 ]
 
 if DEBUG:
@@ -410,7 +412,7 @@ if not DEBUG:
     )
 
     CSRF_TRUSTED_ORIGINS = [
-        *ALLOWED_HOSTS
+        *ALLOWED_FULL_HOSTS
     ]
 
     SECURE_BROWSER_XSS_FILTER = True
