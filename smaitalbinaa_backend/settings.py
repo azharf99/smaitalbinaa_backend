@@ -375,16 +375,7 @@ SOCIAL_AUTH_PIPELINE = (
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8000",
-    "http://127.0.0.1:9000",
-    "http://localhost:5173", # Vite default port
-    "http://127.0.0.1:5173",
-    "http://localhost:3000",
-    "https://smaitalbinaa.pythonanywhere.com",
-    "https://pythonanywhere.com",
-    "https://smait.albinaa.sch.id",
-    "https://smaitalbinaa-frontend.vercel.app"
+    *ALLOWED_HOSTS
 ]
 
 if DEBUG:
@@ -419,12 +410,7 @@ if not DEBUG:
     )
 
     CSRF_TRUSTED_ORIGINS = [
-        "https://smaitalbinaa.pythonanywhere.com",
-        "https://pythonanywhere.com",
-        "https://smait.albinaa.sch.id",
-        "http://localhost:8080",
-        "http://127.0.0.1:8000",
-        "http://127.0.0.1:9000",
+        *ALLOWED_HOSTS
     ]
 
     SECURE_BROWSER_XSS_FILTER = True
