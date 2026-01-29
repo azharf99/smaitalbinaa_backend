@@ -3,6 +3,7 @@ from rest_framework import viewsets, permissions
 from schedules.models import ReporterSchedule, Schedule
 from utils.constants import WEEKDAYS_DICT
 from utils.pagination import StandardResultsSetPagination
+from rest_framework.permissions import IsAuthenticated
 from utils.permissions import HasModelPermission
 from .models import NonTeacherReport, Report
 from rest_framework.decorators import api_view, permission_classes as rest_permission_classes
@@ -25,7 +26,7 @@ class ReportViewSet(viewsets.ModelViewSet):
         'schedule__teacher', 'subtitute_teacher', 'reporter'
     ).all().order_by('-report_date', 'schedule__schedule_time__number')
     serializer_class = ReportSerializer
-    permission_classes = [HasModelPermission]
+    permission_classes = [IsAuthenticated, HasModelPermission]
     pagination_class = StandardResultsSetPagination
 
 

@@ -1,6 +1,7 @@
 from rest_framework import viewsets, filters
 from .models import Student
 from .serializers import StudentSerializer
+from rest_framework.permissions import IsAuthenticated
 from utils.permissions import HasModelPermission
 from utils.pagination import StandardResultsSetPagination
 
@@ -10,7 +11,7 @@ class StudentViewSet(viewsets.ModelViewSet):
     """
     queryset = Student.objects.select_related('student_class').filter(student_status="Aktif")
     serializer_class = StudentSerializer
-    permission_classes = [HasModelPermission]
+    permission_classes = [IsAuthenticated, HasModelPermission]
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['student_name', 'nis', 'nisn', 'student_class__class_name']

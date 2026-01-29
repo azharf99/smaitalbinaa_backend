@@ -4,6 +4,7 @@ from .models import Teacher
 from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import UserSerializer, TeacherSerializer
 from utils.permissions import HasModelPermission
+from rest_framework.permissions import IsAuthenticated
 from utils.pagination import StandardResultsSetPagination
 
 class UsersViewSet(viewsets.ModelViewSet):
@@ -12,7 +13,7 @@ class UsersViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all().order_by('username')
     serializer_class = UserSerializer
-    permission_classes = [HasModelPermission]
+    permission_classes = [IsAuthenticated, HasModelPermission]
     pagination_class = StandardResultsSetPagination
 
 
@@ -22,7 +23,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
     """
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
-    permission_classes = [HasModelPermission]
+    permission_classes = [IsAuthenticated, HasModelPermission]
     pagination_class = StandardResultsSetPagination
     filter_backends = [DjangoFilterBackend]
     filterset_fields = {
