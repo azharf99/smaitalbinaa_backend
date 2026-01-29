@@ -42,7 +42,7 @@ from tahfidz.views import TahfidzViewSet, TargetViewSet, TilawahViewSet
 from teachers.views import TeacherViewSet, UsersViewSet
 from students.views import StudentViewSet
 from utils.login import exchange_token
-from utils.views import MyTokenObtainPairView
+from utils.views import MyTokenObtainPairView, LogoutView
 
 
 router = DefaultRouter()
@@ -96,6 +96,7 @@ urlpatterns = [
     path('api/v1/my-class-reports/quick-grid/set-reporter/', set_current_reporter, name='generate_report_for_current_reporter'),
     # path('upload/', ImageUploadView.as_view(), name='ckeditor_upload'),
     path('news/', include('news.urls')),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('ckeditor5/', include('django_ckeditor_5.urls')),
     
 ]
