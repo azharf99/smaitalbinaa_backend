@@ -64,23 +64,23 @@ class CommentViewSet(SetCurrentUserMixin, viewsets.ModelViewSet):
         return super().get_queryset()
 
 
-class ImageUploadView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+# class ImageUploadView(APIView):
+#     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
-        image_file = request.FILES.get('upload')
+#     def post(self, request, *args, **kwargs):
+#         image_file = request.FILES.get('upload')
 
-        if not image_file:
-            return Response({'error': 'No image provided.'}, status=400)
+#         if not image_file:
+#             return Response({'error': 'No image provided.'}, status=400)
 
-        # Basic validation (you might want to extend this)
-        if not image_file.name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
-            return Response({'error': 'Invalid image format.'}, status=400)
+#         # Basic validation (you might want to extend this)
+#         if not image_file.name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+#             return Response({'error': 'Invalid image format.'}, status=400)
 
-        # Save the image (you might want to use a specific storage or naming strategy)
-        file_name = os.path.join(settings.CKEDITOR_UPLOAD_PATH, image_file.name)
-        with open(os.path.join(settings.MEDIA_ROOT, file_name), 'wb+') as destination:
-            for chunk in image_file.chunks():
-                destination.write(chunk)
+#         # Save the image (you might want to use a specific storage or naming strategy)
+#         file_name = os.path.join(settings.CKEDITOR_UPLOAD_PATH, image_file.name)
+#         with open(os.path.join(settings.MEDIA_ROOT, file_name), 'wb+') as destination:
+#             for chunk in image_file.chunks():
+#                 destination.write(chunk)
 
-        return Response({'url': os.path.join(settings.MEDIA_URL, file_name)})
+#         return Response({'url': os.path.join(settings.MEDIA_URL, file_name)})

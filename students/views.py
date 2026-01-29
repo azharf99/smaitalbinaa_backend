@@ -20,6 +20,6 @@ class StudentViewSet(viewsets.ModelViewSet):
         """Optionally filters by `user_id` query parameter."""
         class_id = self.request.GET.get('class_id')
         if class_id:
-            return super().get_queryset().filter(student_class__id=class_id)
+            return super().get_queryset().filter(student_class__id=class_id, student_status="Aktif")
         
         return super().get_queryset()

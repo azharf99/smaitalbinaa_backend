@@ -51,7 +51,7 @@ class TargetSerializer(serializers.ModelSerializer):
 class TargetTilawahSerializer(serializers.ModelSerializer):
     class Meta:
         model = Target
-        fields = ['id', 'tanggal', 'halaman', 'nomor_surat', 'nama_surat', 'ayat']
+        fields = ['id', 'tanggal', 'nomor_surat', 'nama_surat', 'ayat']
 
 class TilawahSerializer(serializers.ModelSerializer):
     """

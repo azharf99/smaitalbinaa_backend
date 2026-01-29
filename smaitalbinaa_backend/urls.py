@@ -31,7 +31,7 @@ from courses.views import CourseViewSet, SubjectViewSet
 from extracurriculars.views import ExtracurricularViewSet
 from extracurricular_reports.views import ReportViewSet
 from extracurricular_scores.views import ScoreViewSet
-from news.views import CategoryViewSet, CommentViewSet, ImageUploadView, PostViewSet
+from news.views import CategoryViewSet, CommentViewSet, PostViewSet
 from notifications.views import NotificationViewSet
 from olympiads.views import OlympiadFieldViewSet, OlympiadReportViewSet
 from raker.views import LaporanPertanggungJawabanViewSet, ProgramKerjaViewSet
@@ -94,7 +94,9 @@ urlpatterns = [
     path('api/v1/tahfidz-app/', include('tahfidz.urls')),
     path('api/v1/my-class-reports/quick-grid/generate/', generate_report_by_date, name='generate_report_for_current_date'),
     path('api/v1/my-class-reports/quick-grid/set-reporter/', set_current_reporter, name='generate_report_for_current_reporter'),
-    path('upload/', ImageUploadView.as_view(), name='ckeditor_upload'),
+    # path('upload/', ImageUploadView.as_view(), name='ckeditor_upload'),
+    path('news/', include('news.urls')),
+    path('ckeditor5/', include('django_ckeditor_5.urls')),
     
 ]
 

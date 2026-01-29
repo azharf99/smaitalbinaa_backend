@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.text import slugify
 from teachers.models import Teacher
 from taggit.managers import TaggableManager
@@ -41,7 +41,7 @@ class Post(CleanableFileModel):
     
     title = models.CharField(max_length=255, unique=True, db_index=True)
     slug = models.SlugField(max_length=255, blank=True, unique=True, db_index=True, help_text="Jika tidak diisi, akan otomatis terisi dengan judul")
-    content = RichTextUploadingField()
+    content = CKEditor5Field(config_name='extends')
     author = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, related_name='blog_posts')
     category = models.ManyToManyField(Category, related_name='posts', help_text="Pada PC, Tekan Ctrl untuk memilih lebih dari satu kategori")
     tags = TaggableManager()

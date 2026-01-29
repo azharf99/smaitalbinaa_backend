@@ -20,7 +20,7 @@ class BlogTest(models.Model):
     content = models.TextField()
     description = models.TextField()
     tags = TaggableManager()
-    category = models.ManyToManyField(Caterogytest, null=True, blank=True)
+    category = models.ManyToManyField(Caterogytest, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
