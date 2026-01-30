@@ -20,12 +20,14 @@ class LogoutView(APIView):
         try:
             # Delete the user's token to log them out
             request.user.auth_token.delete()
+            logout(request)
             return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
         except AttributeError:
             try:
                 refresh_token = request.data["refresh"]
                 token = RefreshToken(refresh_token)
                 token.blacklist()
+                logout(request)
                 return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
             except Exception as e:
                 logout(request)
