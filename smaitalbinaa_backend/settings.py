@@ -499,6 +499,10 @@ if not DEBUG:
         "x-requested-with",
     )
 
+    CORS_ALLOWED_ORIGINS = [
+        *ALLOWED_FULL_HOSTS
+    ]
+
     CSRF_TRUSTED_ORIGINS = [
         *ALLOWED_FULL_HOSTS
     ]
