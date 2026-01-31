@@ -41,6 +41,9 @@ class HasModelPermission(BasePermission):
         # Check for user authentication for write permissions.
         if not request.user or not request.user.is_authenticated:
             return False
+        
+        if request.user.is_superuser:
+            return True
 
         # Get the model from the view's queryset.
         model = view.get_queryset().model
