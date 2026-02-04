@@ -24,20 +24,25 @@ class ExtracurricularViewSet(viewsets.ModelViewSet):
     serializer_class = ExtracurricularSerializer
     permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
-    # filter_backends = [DjangoFilterBackend]
-    # filterset_fields = {
-    #     'type': ['exact'],
-    #     'category': ['exact'],
-    #     'status': ['exact'],
-    # }
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = {
+        'type': ['exact'],
+        'category': ['exact'],
+        'status': ['exact'],
+    }
 
     def get_queryset(self):
         """Optionally filters by `search` query parameter on the `name` field."""
-        search_query = self.request.query_params.get('search')
-        id_query = self.request.query_params.get('id')
+        search_query = self.request.GET.get('search')
+        id_query = self.request.GET.get('id')
+        all_extracurriculars = self.request.GET.get('all')
+        
         queryset = super().get_queryset()
+        if all_extracurriculars == "true":
+            self.pagination_class = None
+            return queryset.filter(status="Aktif")
         if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
+            queryset = queryset.filter(name__icontains=search_query, status="Aktif")
         if id_query:
             queryset = queryset.filter(id=id_query)
         return queryset
