@@ -45,6 +45,7 @@ class Target(models.Model):
     nomor_surat = models.PositiveBigIntegerField(_("No Surat"))
     nama_surat = models.CharField(_("Nama Surat"), max_length=255)
     ayat = models.PositiveBigIntegerField(_("Ayat"))
+    halaman = models.PositiveBigIntegerField(_("Halaman"), blank=True, null=True)
     catatan = models.CharField(_("Catatan"), max_length=255, blank=True, null=True)
     semester = models.CharField(max_length=7, default=settings.SEMESTER)
     academic_year = models.CharField(max_length=20, default=settings.TAHUN_AJARAN)
