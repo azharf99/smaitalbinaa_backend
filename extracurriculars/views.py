@@ -24,12 +24,12 @@ class ExtracurricularViewSet(viewsets.ModelViewSet):
     serializer_class = ExtracurricularSerializer
     permission_classes = [HasModelPermission]
     pagination_class = StandardResultsSetPagination
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = {
-        'type': ['exact'],
-        'category': ['exact'],
-        'status': ['exact'],
-    }
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = {
+    #     'type': ['exact'],
+    #     'category': ['exact'],
+    #     'status': ['exact'],
+    # }
 
     def get_queryset(self):
         """Optionally filters by `search` query parameter on the `name` field."""
